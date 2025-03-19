@@ -21,6 +21,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "192.168.44.208",
     "0.0.0.0",
+    "mycabs-web.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -28,6 +29,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://192.168.44.208',
     'http://0.0.0.0',
+    'https://mycabs-web.onrender.com',
 ]
 # Application definition
 
