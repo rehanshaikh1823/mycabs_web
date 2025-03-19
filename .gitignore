@@ -1,0 +1,28 @@
+# Virtual environment
+venv/
+.venv/
+
+# IDE specific files
+.idea/
+.vscode/
+.idea
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# SQLite database
+db.sqlite3
+
+# Environment variables
+.env
+
+# Static and media files (if managed externally)
+static/
+media/
+
+# MacOS specific
+.DS_Store

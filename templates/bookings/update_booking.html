@@ -1,0 +1,364 @@
+
+
+{% extends "owner_base.html" %}
+{% load custom_filters %}
+
+{% block owner_content %}
+    <div class="container-fluid py-4">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate id="updateBookingForm">
+                        {% csrf_token %}
+                        <legend class="fs-5 fw-bold mb-3">Update Booking</legend>
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors|join:", " }}
+                            </div>
+                        {% endif %}
+                        <!-- Customer Name and Phone -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label for="customer_name" class="form-label">Customer Name</label>
+                                {{ form.customer_name|add_class:"form-control" }}
+                                {% if form.customer_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.customer_name.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="customer_phone" class="form-label">Customer Phone</label>
+                                {{ form.customer_phone|add_class:"form-control" }}
+                                {% if form.customer_phone.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.customer_phone.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Journey Type -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label for="journey_type" class="form-label">Type of Journey</label>
+                                {{ form.journey_type|add_class:"form-control" }}
+                                {% if form.journey_type.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.journey_type.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Pickup and Drop Dates -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label for="pickup_date" class="form-label">Pickup Date</label>
+                                {{ form.pickup_date|add_class:"form-control" }}
+                                {% if form.pickup_date.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.pickup_date.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6" id="drop_date_div">
+                                <label for="drop_date" class="form-label">Drop Date</label>
+                                {{ form.drop_date|add_class:"form-control" }}
+                                {% if form.drop_date.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.drop_date.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Pickup and Drop Locations -->
+                        <div class="row mb-3" id="single_location_fields">
+                            <div class="col-12 col-md-6">
+                                <label for="pickup_location" class="form-label">Pickup Location</label>
+                                {{ form.pickup_location|add_class:"form-control" }}
+                                {% if form.pickup_location.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.pickup_location.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="drop_location" class="form-label">Drop Location</label>
+                                {{ form.drop_location|add_class:"form-control" }}
+                                {% if form.drop_location.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.drop_location.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3" id="multi_locations_div" style="display: none;">
+                            <div class="col-12">
+                                <label class="form-label">Multiple Pickup and Drop Locations</label>
+                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Pickup Location</th>
+                                    <th>Drop Location</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="pickup_drop_locations">
+                                <!-- Rows will be inserted here by JavaScript -->
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-secondary btn-sm" id="add_location">
+                                        <i class="bi bi-plus"></i> Add Location
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="multi_locations" id="id_multi_locations">
+
+                        <!-- City and Description -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label for="pickup_city" class="form-label">Pickup City</label>
+                                {{ form.pickup_city|add_class:"form-control" }}
+                                {% if form.pickup_city.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.pickup_city.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="drop_city" class="form-label">Drop City</label>
+                                {{ form.drop_city|add_class:"form-control" }}
+                                {% if form.drop_city.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.drop_city.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Journey Description -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label for="journey_description" class="form-label">Description About Journey</label>
+                                {{ form.journey_description|add_class:"form-control" }}
+                                {% if form.journey_description.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.journey_description.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Cab and Driver -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label for="cab" class="form-label">Cab</label>
+                                {{ form.cab|add_class:"form-control" }}
+                                {% if form.cab.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.cab.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="driver" class="form-label">Driver</label>
+                                {{ form.driver|add_class:"form-control" }}
+                                {% if form.driver.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.driver.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Status and Total Fare -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <label for="status" class="form-label">Status</label>
+                                {{ form.status|add_class:"form-control" }}
+                                {% if form.status.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.status.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="total_fare" class="form-label">Total Fare</label>
+                                {{ form.total_fare|add_class:"form-control" }}
+                                {% if form.total_fare.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.total_fare.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- Update Booking Template -->
+                        <div id="expenseFields" class="d-none">  <!-- Initially hidden -->
+                           <div class="row mb-3">
+                                 <div class="col-12 col-md-6">
+                                    <label for="toll" class="form-label">Payment Status</label>
+                                    {{ form.payment_status|add_class:"form-control" }}
+                                    {% if form.payment_status.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.payment_status.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                           </div>
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-6">
+                                    <label for="toll" class="form-label">Toll</label>
+                                    {{ form.toll|add_class:"form-control" }}
+                                    {% if form.toll.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.toll.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="fuel" class="form-label">Fuel</label>
+                                    {{ form.fuel|add_class:"form-control" }}
+                                    {% if form.fuel.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.fuel.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-6">
+                                    <label for="parking" class="form-label">Parking</label>
+                                    {{ form.parking|add_class:"form-control" }}
+                                    {% if form.parking.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.parking.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="others" class="form-label">Others</label>
+                                    {{ form.others|add_class:"form-control" }}
+                                    {% if form.others.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.others.errors|join:", " }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-sm">Update Booking</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const journeyTypeField = document.getElementById('id_journey_type');
+            const dropDateDiv = document.getElementById('drop_date_div');
+            const singleLocationFields = document.getElementById('single_location_fields');
+            const multiLocationsDiv = document.getElementById('multi_locations_div');
+            const locationsTable = document.getElementById('pickup_drop_locations');
+            const addLocationButton = document.getElementById('add_location');
+            const multiLocationsInput = document.getElementById('id_multi_locations');
+            const updateBookingForm = document.getElementById('updateBookingForm');
+            const pickupCityLabel = document.querySelector('label[for="pickup_city"]');
+            const dropCityLabel = document.querySelector('label[for="drop_city"]');
+
+            function toggleFields() {
+                const journeyType = journeyTypeField.value;
+                const isMultipleLocations = journeyType === 'Multiple Locations';
+                dropDateDiv.style.display = journeyType !== 'One Way' ? 'block' : 'none';
+                singleLocationFields.style.display = journeyType === 'Multiple Locations' ? 'none' : 'flex';
+                multiLocationsDiv.style.display = journeyType === 'Multiple Locations' ? 'block' : 'none';
+
+                pickupCityLabel.textContent = isMultipleLocations ? 'First Pickup City' : 'Pickup City';
+                dropCityLabel.textContent = isMultipleLocations ? 'End Drop City' : 'Drop City';
+
+                updateMultiLocations();
+            }
+
+            function addLocationRow(pickup = '', drop = '') {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+            <td><input type="text" class="form-control pickup-location" placeholder="Pickup Location" value="${pickup}"></td>
+            <td><input type="text" class="form-control drop-location" placeholder="Drop Location" value="${drop}"></td>
+            <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+        `;
+                locationsTable.appendChild(newRow);
+            }
+
+            function updateMultiLocations() {
+                const locations = Array.from(locationsTable.querySelectorAll('tr')).map(row => ({
+                    pickup: row.querySelector('.pickup-location').value.trim(),
+                    drop: row.querySelector('.drop-location').value.trim()
+                })).filter(location => location.pickup || location.drop);
+                multiLocationsInput.value = JSON.stringify(locations);
+            }
+
+            function populateMultiLocations() {
+                const rawData = JSON.parse('{{ multi_locations_json|escapejs }}' || '[]');
+                locationsTable.innerHTML = '';
+                rawData.forEach(location => addLocationRow(location.pickup || '', location.drop || ''));
+                if (rawData.length === 0) addLocationRow();
+                updateMultiLocations();
+            }
+
+            journeyTypeField.addEventListener('change', toggleFields);
+            addLocationButton.addEventListener('click', () => addLocationRow());
+            locationsTable.addEventListener('click', event => {
+                if (event.target.classList.contains('remove-row')) {
+                    event.target.closest('tr').remove();
+                    updateMultiLocations();
+                }
+            });
+            locationsTable.addEventListener('input', updateMultiLocations);
+
+            updateBookingForm.addEventListener('submit', function (e) {
+                updateMultiLocations();
+                const locations = JSON.parse(multiLocationsInput.value);
+                if (journeyTypeField.value === 'Multiple Locations' && locations.length === 0) {
+                    e.preventDefault();
+                    alert('Please add at least one location for multiple locations journey type.');
+                }
+            });
+
+            toggleFields();
+            populateMultiLocations();
+
+            const statusField = document.getElementById('id_status');
+            console.log('statusField',statusField)
+            const expenseFields = document.getElementById('expenseFields');
+
+            function toggleExpenseFields() {
+                if (statusField.value === 'Completed') {
+                    expenseFields.classList.remove('d-none');
+                } else {
+                    expenseFields.classList.add('d-none');
+                }
+            }
+
+            // Run on page load
+            toggleExpenseFields();
+
+            // Run every time the status changes
+            statusField.addEventListener('change', toggleExpenseFields);
+        });
+    </script>
+{% endblock %}

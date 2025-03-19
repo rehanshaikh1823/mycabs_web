@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1px;
+            box-sizing: border-box;
+        }
+
+        .invoice-container {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .invoice-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            max-width: 40px;
+            height: auto;
+            border-radius: 50%;
+            border: 1px solid white;
+            margin-right: 50px;
+        }
+
+        .invoice-body {
+            padding: 10px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .col-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 5px;
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            color: #007bff;
+            border-bottom: 1px solid #007bff;
+            padding-bottom: 3px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+
+        .table-borderless td, .table-borderless th {
+            border: none;
+        }
+
+        .icon-column {
+            width: 20px;
+        }
+
+        .text-end {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, .05);
+        }
+
+        .table-light {
+            background-color: #f8f9fa;
+        }
+
+        .fw-bold {
+            font-weight: 600;
+        }
+
+        .text-muted {
+            color: #6c757d;
+            font-size: 10px;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        p {
+            margin: 0 0 5px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <div class="logo-title">
+                <img src="https://media.istockphoto.com/id/1423867725/vector/taxi-service-badge-taxi-map-pointer-vector-icon-for-business-and-advertising-public.jpg?s=612x612&w=0&k=20&c=bJkRG7N7SdCHpezSO99_eUzfSxAcyfAlyX5R-zXB830="
+                     alt="Choice Cab" class="logo">
+                <h1>INVOICE</h1>
+            </div>
+        </div>
+        <div class="invoice-body">
+            <div class="row">
+                <div class="col-6">
+                    <h5 class="section-title">{{ owner.business_name }}</h5>
+                    <p>
+                        {{ owner.business_address }}<br>
+                        +91 {{ owner.user.mobile }}<br>
+                        {{ owner.user.email }}
+                    </p>
+                </div>
+                <div class="col-6">
+                    <h5 class="section-title">Invoice Details</h5>
+                    <p>
+                        <strong>Invoice No:</strong> {{ invoice.invoice_number }}<br>
+                        <strong>Date:</strong> {{ invoice.created_date|date:"l, F j, Y H:i" }}<br>
+                        <strong>Status:</strong> {{ booking.payment_status }} <br>
+                    </p>
+                </div>
+            </div>
+
+            <h5 class="section-title">Journey Details</h5>
+            <table class="table-borderless">
+                <tr>
+                    <td class="icon-column">📍</td>
+                    <td><strong>Pickup:</strong>
+                        {% if booking.journey_type != 'Multiple Locations' %}
+                            {{ booking.pickup_location }},
+                        {% endif %} {{ booking.pickup_city }}</td>
+                    <td class="icon-column">📅</td>
+                    <td><strong>Date:</strong> {{ booking.pickup_date|date:"l, F j, Y" }}</td>
+                </tr>
+                <tr>
+                    <td class="icon-column">🏁</td>
+                    <td><strong>Drop:</strong>
+                        {% if booking.journey_type != 'Multiple Locations' %}
+                            {{ booking.drop_location }},
+                        {% endif %} {{ booking.drop_city }}
+                    </td>
+                    <td class="icon-column">✅</td>
+                    <td><strong>Completion:</strong> {{ booking.drop_date|date:"l, F j, Y" }}</td>
+                </tr>
+                <tr>
+                    <td class="icon-column">🚕</td>
+                    <td ><strong>Journey Type:</strong> {{ booking.journey_type }}</td>
+                </tr>
+                <tr>
+                    {% if booking.journey_type == 'Multiple Locations' %}
+                        <td colspan="4">
+                            <ul>
+                                {% for location in booking.multi_locations %}
+                                    <li>{{ location.pickup }} -> {{ location.drop }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    {% endif %}
+                </tr>
+            </table>
+
+            <div class="row">
+                <div class="col-6">
+                    <h5 class="section-title">Driver & Passenger Details</h5>
+                    <p>
+                        <strong>Driver:</strong> {{ driver.user.first_name }} {{ driver.user.last_name }}<br>
+                        <strong>Phone:</strong> {{ driver.user.mobile }}<br>
+                        <strong>Cab:</strong> {{ cab.model }} ({{ cab.vehicle_number }})<br>
+                        <strong>Passenger:</strong> {{ booking.customer_name }}
+                    </p>
+                </div>
+                <div class="col-6">
+                    <h5 class="section-title">Fare Breakdown</h5>
+                    <table class="table-striped">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-end">Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Journey Fare</td>
+                            <td class="text-end">₹{{ booking.total_fare }}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot class="table-light">
+                        <tr class="fw-bold">
+                            <td>Total</td>
+                            <td class="text-end">₹{{ booking.total_fare }}</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-muted">Thank you for choosing Choice Cab. We appreciate your business!</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

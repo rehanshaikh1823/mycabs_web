@@ -1,0 +1,117 @@
+{% extends 'owner_base.html' %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+{% endblock %}
+
+{% block owner_content %}
+    <div class="container mt-4">
+        <h2>My Cabs</h2>
+        <div class="row">
+            {% for cab in cabs %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cab.vehicle_number }}</h5>
+                            <p class="card-text">Model: {{ cab.model }} -
+                                {% if cab.driver %}
+                                    {{ cab.driver.user.first_name }} {{ cab.driver.user.last_name }}
+                                {% else %}
+                                    No Driver Assigned
+                                {% endif %}
+                            </p>
+                            <p class="">Current Location:
+                                <span id="current-location-{{ cab.id }}">{{ cab.current_location|default:"Not set" }}</span>
+                            </p>
+                         <button class="btn btn-sm btn-outline-primary show-on-map bi bi-crosshair"
+                                    data-cab-id="{{ cab.id }}" data-lat="{{ cab.latitude }}"
+                                    data-lng="{{ cab.longitude }}">Track
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-4">
+            <h3>Cab Locations</h3>
+            <div id="map"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+
+            const cabIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.freepik.com/64/11529/11529553.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+
+            let map = L.map('map');
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            let markers = {};
+            let bounds = L.latLngBounds();
+
+            function updateMarker(cabId, location, vehicleNumber) {
+                if (markers[cabId]) {
+                    markers[cabId].setLatLng(location);
+                } else {
+                    markers[cabId] = L.marker(location, {icon: cabIcon})
+                        .bindTooltip(vehicleNumber, {permanent: true, direction: 'top', offset: [0, -40]})
+                        .addTo(map);
+                }
+                bounds.extend(location);
+                refreshMapBounds();
+            }
+
+            function refreshMapBounds() {
+                if (Object.keys(markers).length > 0) {
+                    let newBounds = L.latLngBounds();
+                    for (let id in markers) {
+                        if (markers[id]) {
+                            newBounds.extend(markers[id].getLatLng());
+                        }
+                    }
+                    map.fitBounds(newBounds, {padding: [50, 50]});
+                } else {
+                    map.setView([20.5937, 78.9629], 5);  // Center of India
+                }
+            }
+
+            {% for cab in cabs %}
+                {% if cab.latitude and cab.longitude and cab.is_available %}
+                    updateMarker("{{ cab.id }}", {
+                        lat: {{ cab.latitude }},
+                        lng: {{ cab.longitude }}
+                    }, "{{ cab.vehicle_number }}");
+                {% endif %}
+            {% endfor %}
+
+            $('.show-on-map').on('click', function () {
+                const cabId = $(this).data('cab-id');
+                const lat = parseFloat($(this).data('lat'));
+                const lng = parseFloat($(this).data('lng'));
+
+                if (markers[cabId]) {
+                    map.setView([lat, lng], 15);
+                    markers[cabId].openTooltip();
+                } else {
+                    alert('Cab location not available on map');
+                }
+            });
+        });
+    </script>
+{% endblock %}

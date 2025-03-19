@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: -280px;
+            transition: all 0.3s ease-in-out;
+            z-index: 1050;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: #0d6efd;
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            transition: margin 0.3s ease-in-out;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+        }
+
+        @media (min-width: 992px) {
+            .sidebar {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+
+            .overlay {
+                display: none;
+            }
+        }
+
+        .submenu {
+            transition: max-height 0.3s ease-in-out;
+            overflow: hidden;
+            max-height: 0;
+        }
+
+        .submenu.show {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar bg-light border-end">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    {% block sidebar_menu %}
+                    {% endblock %}
+                </ul>
+            </div>
+        </nav>
+        <div id="overlay" class="overlay"></div>
+        <!-- Main content -->
+        <div class="main-content flex-grow-1 p-1">
+            <button id="sidebarToggle" class="btn btn-primary d-lg-none mb-3" type="button">
+                <i class="bi bi-list"></i> Menu
+            </button>
+            {% block main_content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const overlay = document.getElementById('overlay');
+            const navLinks = document.querySelectorAll('.sidebar .nav-link');
+            const parentMenus = document.querySelectorAll('.sidebar .parent-menu');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('show');
+                overlay.classList.toggle('show');
+                overlay.style.display = sidebar.classList.contains('show') ? 'block' : 'none';
+            }
+
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            // Add active class to current page
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === window.location.pathname) {
+                    link.classList.add('active');
+                    const parentCollapse = link.closest('.collapse');
+                    if (parentCollapse) {
+                        parentCollapse.classList.add('show');
+                        const parentMenu = sidebar.querySelector(`[href="#${parentCollapse.id}"]`);
+                        if (parentMenu) {
+                            parentMenu.setAttribute('aria-expanded', 'true');
+                        }
+                    }
+                }
+            });
+
+            // Handle parent menu clicks
+            parentMenus.forEach(parentMenu => {
+                parentMenu.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Prevent event bubbling
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSubmenu = document.getElementById(targetId);
+
+                    // Close all other open submenus
+                    parentMenus.forEach(menu => {
+                        if (menu !== this) {
+                            const submenuId = menu.getAttribute('href').substring(1);
+                            const submenu = document.getElementById(submenuId);
+                            submenu.classList.remove('show');
+                            submenu.style.maxHeight = null;
+                            menu.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    // Toggle the clicked submenu
+                    targetSubmenu.classList.toggle('show');
+                    if (targetSubmenu.classList.contains('show')) {
+                        targetSubmenu.style.maxHeight = targetSubmenu.scrollHeight + "px";
+                    } else {
+                        targetSubmenu.style.maxHeight = null;
+                    }
+                    const isExpanded = targetSubmenu.classList.contains('show');
+                    this.setAttribute('aria-expanded', isExpanded);
+                });
+            });
+
+            // Close sidebar on submenu link click (mobile only)
+            navLinks.forEach(link => {
+                if (!link.classList.contains('parent-menu')) {
+                    link.addEventListener('click', function () {
+                        if (window.innerWidth < 992) {
+                            toggleSidebar();
+                        }
+                    });
+                }
+            });
+
+            // Adjust sidebar on window resize
+            window.addEventListener('resize', function () {
+                if (window.innerWidth >= 992) {
+                    sidebar.classList.remove('show');
+                    overlay.classList.remove('show');
+                    overlay.style.display = 'none';
+                }
+            });
+
+            // Close submenus when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!sidebar.contains(e.target) && window.innerWidth >= 992) {
+                    parentMenus.forEach(menu => {
+                        const submenuId = menu.getAttribute('href').substring(1);
+                        const submenu = document.getElementById(submenuId);
+                        submenu.classList.remove('show');
+                        submenu.style.maxHeight = null;
+                        menu.setAttribute('aria-expanded', 'false');
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}

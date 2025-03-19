@@ -1,0 +1,106 @@
+{% extends "owner_base.html" %}
+
+{% block owner_content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Your Cabs</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Cab Number</th>
+                <th>Model</th>
+                <th>Capacity</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cab in cabs %}
+                <tr>
+                    <td><a href="{% url 'update_cab' cab.id %}">{{ cab.vehicle_number }}</a></td>
+                    <td>{{ cab.model }}</td>
+                    <td>{{ cab.capacity }}</td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input cab-status-toggle" type="checkbox" role="switch"
+                                   id="flexSwitchCheck{{ cab.id }}" data-cab-id="{{ cab.id }}"
+                                   {% if cab.is_active %}checked{% endif %}>
+                            <label class="form-check-label" for="flexSwitchCheck{{ cab.id }}"></label>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No cabs added yet.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'add_cab' %}" class="btn btn-primary">Add New Cab</a>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+             // Cache the toast container jQuery object
+            let $toastContainer = $('#toast-container');
+
+            // Check if the toast container exists, if not, create it
+            if ($toastContainer.length === 0) {
+                $toastContainer = $('<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;"></div>');
+                $('body').append($toastContainer);
+            }
+
+            $('.cab-status-toggle').change(function () {
+                const cabId = $(this).data('cab-id');
+                const isActive = $(this).prop('checked');
+                $.ajax({
+                    url: "{% url 'toggle_cab_status' %}",
+                    method: 'POST',
+                    data: {
+                        'cab_id': cabId,
+                        'is_active': isActive,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            const label = $('label[for="flexSwitchCheck' + cabId + '"]');
+                            showToast('Cab status updated successfully', 'success');
+                        } else {
+                            showToast( 'Failed to update cab status', 'danger');
+                            $('#flexSwitchCheck' + cabId).prop('checked', !isActive);
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                        $('#flexSwitchCheck' + cabId).prop('checked', !isActive);
+                    }
+                });
+            });
+            function showToast(message, type) {
+                const toastId = 'toast-' + Math.random().toString(36).substring(2, 9);
+                const toastHTML = `
+                <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white  m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>`;
+
+                // Append toast to the toast container
+                $toastContainer.append(toastHTML);
+
+                // Initialize and show the toast
+                const toastElement = new bootstrap.Toast(document.getElementById(toastId));
+                toastElement.show();
+
+                // Remove the toast after it hides
+                $('#' + toastId).on('hidden.bs.toast', function () {
+                    $(this).remove();
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,123 @@
+
+{% extends 'driver_base.html' %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+{% endblock %}
+
+{% block driver_content %}
+<div class="container mt-4">
+    <h2>My Cab</h2>
+    {% if cab %}
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ cab.vehicle_number }}</h5>
+                    <p class="card-text">Model: {{ cab.model }}</p>
+                    <p class="card-text">Current Location: <span id="current-location">Updating...</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <h3>Cab Location</h3>
+        <div id="map"></div>
+    </div>
+    {% else %}
+    <p>No cab assigned.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+    $(document).ready(function() {
+        {% if cab %}
+        const cabIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.freepik.com/64/11529/11529553.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
+        let map = L.map('map');
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        let marker;
+
+        function updateMarker(lat, lng) {
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            } else {
+                marker = L.marker([lat, lng], { icon: cabIcon })
+                    .bindTooltip("{{ cab.vehicle_number }}", { permanent: true, direction: 'top', offset: [0, -40] })
+                    .addTo(map);
+            }
+            map.setView([lat, lng], 15);
+        }
+
+        function updateLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    $.ajax({
+                        url: "{% url 'update_cab_location' %}",
+                        type: 'POST',
+                        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                        data: JSON.stringify({ latitude: lat, longitude: lng }),
+                        contentType: 'application/json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                updateMarker(lat, lng);
+                                $('#current-location').text(`Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
+                            } else {
+                                console.error('Error updating location:', response.message);
+                            }
+                        },
+                        error: function() {
+                            console.error('Error sending location update');
+                        }
+                    });
+                }, function(error) {
+                    console.error('Error getting location:', error);
+                });
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Update location every 30 seconds
+        setInterval(updateLocation, 30000);
+
+        // Initial update
+        updateLocation();
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        {% endif %}
+    });
+    </script>
+{% endblock %}

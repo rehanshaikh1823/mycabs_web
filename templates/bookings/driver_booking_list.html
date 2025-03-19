@@ -1,0 +1,39 @@
+{% extends "driver_base.html" %}
+{% load custom_filters %}
+{% block driver_content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">My Bookings</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Customer Phone</th>
+                <th>Pickup Location</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.id }}</td>
+                    <td>{{ booking.customer_name }}</td>
+                    <td>{{ booking.customer_phone }}</td>
+                    <td>{{ booking.pickup_location }}</td>
+                    <td class="{{ booking.status|status_class }}">{{ booking.status }}</td>
+                    <td>
+                        <a href="{% url 'driver_complete_booking' booking.id %}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No bookings added yet.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

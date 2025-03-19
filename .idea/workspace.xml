@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b976769e-bb45-4351-82d0-b64ffcc8deed" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/mycabs.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0003_alter_booking_journey_type.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0004_booking_total_fare.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0005_alter_booking_customer_phone.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0006_booking_owner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0007_alter_booking_owner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0008_alter_booking_cab_alter_booking_driver_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0009_booking_multi_drops_locations_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0010_remove_booking_multi_drops_locations_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0011_booking_additional_charges_alter_booking_drop_city.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/0012_booking_payment_status_alter_booking_journey_type.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/templatetags/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/templatetags/custom_filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookings/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cabs/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cabs/migrations/0003_cab_current_location_cab_is_available_cab_latitude_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cabs/migrations/0004_cab_driver.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cabs/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cabs/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cabs/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0004_remove_driver_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0005_driver_is_employed.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0006_driver_mobile_number.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0007_alter_driver_mobile_number.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0008_remove_driver_driver_name_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0009_driver_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0010_alter_driver_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0011_alter_driver_experience_years_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0013_alter_driver_owner_alter_driver_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/0014_remove_driver_experience_years.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/drivers/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0002_alter_invoice_status.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0003_remove_invoice_due_date_invoice_payment_method.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0004_alter_invoice_invoice_number.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0005_remove_invoice_payment_method_remove_invoice_status_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0006_alter_invoice_payment_status.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0007_alter_invoice_payment_status.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/0008_remove_invoice_payment_status_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/templatetags/invoices_custom_filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invoices/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/asgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/decorators.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mycabs/wsgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/owners/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/owners/migrations/0003_owner_gst_number_owner_pan_number.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/owners/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/owners/templatetags/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/owners/templatetags/form_filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/owners/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/403.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/bookings/booking_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/bookings/create_booking.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/bookings/driver_booking_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/bookings/driver_complete_booking.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/bookings/update_booking.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/bookings/view_booking.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cabs/add_cab.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cabs/cabs_location.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cabs/driver_cab_location.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cabs/list_cabs.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/cabs/update_cab.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/common_sidebar.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/driver_base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/drivers/dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/drivers/list_drivers.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/drivers/update_profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/invoices/create_invoice.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/invoices/invoice_pdf.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/logout.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/owner_base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/owners/dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/owners/update_profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/users/driver_signup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/users/profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/users/signup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/migrations/0002_remove_user_address.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/migrations/0003_alter_user_mobile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/templatetags/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/templatetags/form_tags.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2jVOqocCBbiSQeVFxkng4EdDavi" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.mycabs.executor": "Debug",
+    "Python.manage.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "django.template.preview.state": "SHOW_EDITOR",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/home/rehan/PycharmProjects/mycabs",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/owners/templatetags" />
+      <recent name="$PROJECT_DIR$/drivers/migrations" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates/invoices" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.manage">
+    <configuration name="manage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="mycabs" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manage.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="mycabs" type="Python.DjangoServer" factoryName="Django server">
+      <module name="mycabs" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="mycabs.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="localhost" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.manage" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-ce3d9afa04ac-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.20224.347" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b976769e-bb45-4351-82d0-b64ffcc8deed" name="Changes" comment="" />
+      <created>1721468971802</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721468971802</updated>
+      <workItem from="1721468980169" duration="1003000" />
+      <workItem from="1721470646636" duration="526000" />
+      <workItem from="1721471476531" duration="4124000" />
+      <workItem from="1721479603547" duration="1476000" />
+      <workItem from="1721481193932" duration="1959000" />
+      <workItem from="1721734927905" duration="762000" />
+      <workItem from="1721798518206" duration="8000000" />
+      <workItem from="1721811420488" duration="3177000" />
+      <workItem from="1721825933019" duration="2995000" />
+      <workItem from="1721839269095" duration="5266000" />
+      <workItem from="1721883946221" duration="7605000" />
+      <workItem from="1721898324893" duration="10043000" />
+      <workItem from="1721966938850" duration="5553000" />
+      <workItem from="1721985074175" duration="5777000" />
+      <workItem from="1722012596612" duration="4796000" />
+      <workItem from="1722144361046" duration="6927000" />
+      <workItem from="1722157313243" duration="3268000" />
+      <workItem from="1722163428796" duration="2222000" />
+      <workItem from="1722165672127" duration="1374000" />
+      <workItem from="1722171106224" duration="3264000" />
+      <workItem from="1722176621326" duration="1161000" />
+      <workItem from="1722227790334" duration="10527000" />
+      <workItem from="1722248723188" duration="5122000" />
+      <workItem from="1722257862964" duration="2467000" />
+      <workItem from="1722310692294" duration="7645000" />
+      <workItem from="1722324313372" duration="999000" />
+      <workItem from="1722330324220" duration="9393000" />
+      <workItem from="1722344939969" duration="1880000" />
+      <workItem from="1722349466478" duration="1629000" />
+      <workItem from="1722360128809" duration="1339000" />
+      <workItem from="1722397367138" duration="11233000" />
+      <workItem from="1722416164722" duration="9989000" />
+      <workItem from="1722484928664" duration="4569000" />
+      <workItem from="1722491448817" duration="6335000" />
+      <workItem from="1722504354661" duration="8736000" />
+      <workItem from="1722518193302" duration="1509000" />
+      <workItem from="1722573028661" duration="6727000" />
+      <workItem from="1722595737444" duration="1827000" />
+      <workItem from="1722604704232" duration="5402000" />
+      <workItem from="1722661009146" duration="9012000" />
+      <workItem from="1722678824342" duration="8529000" />
+      <workItem from="1722746540525" duration="13778000" />
+      <workItem from="1722789965851" duration="1674000" />
+      <workItem from="1722833271876" duration="10129000" />
+      <workItem from="1722849870970" duration="9760000" />
+      <workItem from="1722874347720" duration="702000" />
+      <workItem from="1722918805653" duration="2615000" />
+      <workItem from="1722935328651" duration="9865000" />
+      <workItem from="1722949104699" duration="2637000" />
+      <workItem from="1722954547298" duration="1164000" />
+      <workItem from="1723007801696" duration="8503000" />
+      <workItem from="1723020788022" duration="10947000" />
+      <workItem from="1723035176726" duration="2224000" />
+      <workItem from="1723050409737" duration="2435000" />
+      <workItem from="1723093760185" duration="8208000" />
+      <workItem from="1723108766412" duration="2516000" />
+      <workItem from="1723194746714" duration="5625000" />
+      <workItem from="1723219398297" duration="8707000" />
+      <workItem from="1723264929891" duration="10946000" />
+      <workItem from="1723280851262" duration="8418000" />
+      <workItem from="1723350563084" duration="1285000" />
+      <workItem from="1723357182238" duration="1240000" />
+      <workItem from="1723367259407" duration="6007000" />
+      <workItem from="1723381933943" duration="1413000" />
+      <workItem from="1723385891052" duration="1846000" />
+      <workItem from="1723436569337" duration="8918000" />
+      <workItem from="1723454479377" duration="7417000" />
+      <workItem from="1723467524333" duration="1729000" />
+      <workItem from="1723473000686" duration="1238000" />
+      <workItem from="1723480187885" duration="2023000" />
+      <workItem from="1723540264977" duration="39000" />
+      <workItem from="1723559729891" duration="481000" />
+      <workItem from="1723567038134" duration="1530000" />
+      <workItem from="1723569631907" duration="445000" />
+      <workItem from="1723608181775" duration="7653000" />
+      <workItem from="1723616718855" duration="1365000" />
+      <workItem from="1723721906224" duration="154000" />
+      <workItem from="1723890076482" duration="4034000" />
+      <workItem from="1723958841271" duration="1296000" />
+      <workItem from="1723963250773" duration="1465000" />
+      <workItem from="1723976019950" duration="2942000" />
+      <workItem from="1723979846187" duration="89000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/mycabs$manage.coverage" NAME="manage Coverage Results" MODIFIED="1721734956860" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

@@ -1,0 +1,87 @@
+{% extends "common_sidebar.html" %}
+
+{% block sidebar_menu %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'owner_dashboard' %}">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link parent-menu" data-bs-toggle="collapse" href="#bookingsSubmenu" role="button"
+       aria-expanded="false" aria-controls="bookingsSubmenu">
+        <i class="bi bi-calendar-check"></i> Bookings
+        <i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <div class="collapse submenu" id="bookingsSubmenu">
+        <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "create_booking" %}">
+                    <i class="bi bi-circle"></i> Create Bookings
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "booking_list" %}">
+                    <i class="bi bi-circle"></i> Bookings Listing
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li class="nav-item">
+    <a class="nav-link parent-menu" data-bs-toggle="collapse" href="#driversSubmenu" role="button"
+       aria-expanded="false" aria-controls="driversSubmenu">
+        <i class="bi bi-people"></i> Drivers
+        <i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <div class="collapse submenu" id="driversSubmenu">
+        <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create_driver' %}">
+                    <i class="bi bi-circle"></i> Add Driver
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'list_drivers' %}">
+                    <i class="bi bi-circle"></i> Driver Listing
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li class="nav-item">
+    <a class="nav-link parent-menu" data-bs-toggle="collapse" href="#cabsSubmenu" role="button"
+       aria-expanded="false" aria-controls="cabsSubmenu">
+        <i class="bi bi-car-front"></i> Cabs
+        <i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <div class="collapse submenu" id="cabsSubmenu">
+        <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'add_cab' %}">
+                    <i class="bi bi-circle"></i> Add Cab
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'list_cabs' %}">
+                    <i class="bi bi-circle"></i> Cab Listing
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'cabs_location' %}">
+                    <i class="bi bi-circle"></i>Cab Location
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'update_owner_profile' %}">
+        <i class="bi bi-building-check"></i> Update Business
+    </a>
+</li>
+{% endblock %}
+
+{% block main_content %}
+{% block owner_content %}
+{% endblock %}
+{% endblock %}

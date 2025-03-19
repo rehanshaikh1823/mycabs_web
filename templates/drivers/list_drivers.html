@@ -1,0 +1,173 @@
+{% extends "owner_base.html" %}
+
+{% block owner_content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Your Drivers</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Assigned Cabs</th>
+                <th>Employed</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for driver in drivers %}
+                <tr>
+                    <td>{{ driver.user.username }}</td>
+                    <td>{{ driver.user.first_name }}</td>
+                    <td>{{ driver.user.last_name }}</td>
+                    <td>
+                        <select class="form-select cab-assign-dropdown" data-driver-id="{{ driver.id }}">
+                            <option value="">Set cab free</option>
+                            {% if driver.assigned_cab %}
+                                <option value="{{ driver.assigned_cab.id }}" selected>
+                                    {{ driver.assigned_cab.vehicle_number }}
+                                </option>
+                            {% endif %}
+                            {% for cab in available_cabs %}
+                                <option value="{{ cab.id }}"
+                                        {% if driver.assigned_cab and driver.assigned_cab.id == cab.id %}selected{% endif %}>
+                                    {{ cab.vehicle_number }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+
+
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input driver-status-toggle" type="checkbox" role="switch"
+                                   id="flexSwitchCheck{{ driver.id }}" data-driver-id="{{ driver.id }}"
+                                   {% if driver.user.is_active %}checked{% endif %}>
+                            <label class="form-check-label" for="flexSwitchCheck{{ driver.id }}"></label>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No drivers added yet.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'create_driver' %}" class="btn btn-primary">Add New Driver</a>
+    </div>
+
+{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            // Cache the toast container jQuery object
+            let $toastContainer = $('#toast-container');
+
+            // Check if the toast container exists, if not, create it
+            if ($toastContainer.length === 0) {
+                $toastContainer = $('<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;"></div>');
+                $('body').append($toastContainer);
+            }
+
+            $('.driver-status-toggle').change(function () {
+                const driverId = $(this).data('driver-id');
+                const isActive = $(this).prop('checked');
+                $.ajax({
+                    url: "{% url 'toggle_driver_status' %}",
+                    method: 'POST',
+                    data: {
+                        'driver_id': driverId,
+                        'is_active': isActive,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            showToast('Driver status updated successfully', 'success');
+                        } else {
+                            $('#flexSwitchCheck' + driverId).prop('checked', !isActive);
+                            showToast('Failed to update driver status', 'danger');
+                        }
+                    },
+                    error: function () {
+                        // Revert the toggle if there was an error
+                        $('#flexSwitchCheck' + driverId).prop('checked', !isActive);
+                        showToast('Error', 'An error occurred. Please try again.', 'danger');
+                    }
+                });
+            });
+
+            function showToast(message, type) {
+                const toastId = 'toast-' + Math.random().toString(36).substring(2, 9);
+                const toastHTML = `
+                <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white  m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>`;
+
+                // Append toast to the toast container
+                $toastContainer.append(toastHTML);
+
+                // Initialize and show the toast
+                const toastElement = new bootstrap.Toast(document.getElementById(toastId));
+                toastElement.show();
+
+                // Remove the toast after it hides
+                $('#' + toastId).on('hidden.bs.toast', function () {
+                    $(this).remove();
+                });
+            }
+
+            $('.cab-assign-dropdown').change(function () {
+                const $dropdown = $(this);
+                const driverId = $dropdown.data('driver-id');
+                const cabId = $dropdown.val();
+
+                $.ajax({
+                    url: "{% url 'assign_cab_to_driver' %}",
+                    method: 'POST',
+                    data: {
+                        'driver_id': driverId,
+                        'cab_id': cabId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            alert(response.message);
+                            updateDropdown($dropdown, response.available_cabs, cabId);
+                            window.location.reload()
+                        } else {
+                            alert(response.message || 'Failed to update cab assignment.');
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error("Error updating cab assignment:", xhr.responseText);
+                        alert('Error updating cab assignment. Please try again.');
+                    }
+                });
+            });
+
+            function updateDropdown($dropdown, availableCabs, selectedCabId) {
+                console.log('avaialble cabs', availableCabs)
+                if ($dropdown.find('option').length === 1) { // Check if dropdown is being populated for the first time
+                    $dropdown.empty(); // Clear existing options
+                    $dropdown.append('<option value="">Set cab free</option>'); // Add default option
+                }
+
+                availableCabs.forEach(function (cab) {
+                    console.log('cab',cab)
+                    const isSelected = (selectedCabId == cab.id) ? 'selected' : '';
+                    $dropdown.append(`<option value="${cab.id}" ${isSelected}>${cab.vehicle_number}</option>`);
+                });
+
+                $dropdown.val(selectedCabId || ''); // Set the selected value
+            }
+
+        });
+    </script>
+
+{% endblock %}

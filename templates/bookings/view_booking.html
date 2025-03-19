@@ -1,0 +1,259 @@
+{% extends "owner_base.html" %}
+{% load custom_filters %}
+{% block owner_content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Booking Details</h2>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="card-title">Booking #{{ booking.id }}</h5>
+                    </div>
+                    <div class="col-md-6 text-md-end text-center">
+                        <button id="sendToDriverWhatsAppBtn" class="btn btn-success bi bi-whatsapp me-2">
+                            Driver
+                        </button>
+                        <button id="sendToClientWhatsAppBtn" class="btn btn-success bi bi-whatsapp">
+                            Customer
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Customer Information</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Customer Name:</strong> {{ booking.customer_name }}</li>
+                            <li><strong>Customer Phone:</strong> {{ booking.customer_phone }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Pickup Information</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Pickup Date:</strong> {{ booking.pickup_date }}</li>
+                            <li><strong>Pickup Location:</strong> {{ booking.pickup_location }}</li>
+                            <li><strong>Pickup City:</strong> {{ booking.pickup_city }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Drop Information</h6>
+                        <ul class="list-unstyled">
+                            {% if booking.drop_date %}
+                                <li><strong>Drop Date:</strong> {{ booking.drop_date }}</li>
+                            {% endif %}
+                            <li><strong>Drop Location:</strong> {{ booking.drop_location }}</li>
+                            <li><strong>Drop City:</strong> {{ booking.drop_city }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Journey Details</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Journey Type:</strong> {{ booking.journey_type }}</li>
+                            <li><strong>Journey Description:</strong> {{ booking.journey_description }}</li>
+                            <li><strong>Current Status:</strong> {{ booking.status }}</li>
+                        </ul>
+                    </div>
+                    {% if booking.multi_locations %}
+                        <div class="col-md-4 mb-3">
+                            <h6 class="text-muted">Multiple Locations</h6>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Pickup</th>
+                                    <th>Drop</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for location in booking.multi_locations %}
+                                    <tr>
+                                        <td>{{ location.pickup }}</td>
+                                        <td>{{ location.drop }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Cab and Driver</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Cab:</strong> {{ booking.cab }}</li>
+                            <li><strong>Driver:</strong> {{ booking.driver }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 class="text-muted">Fare Information</h6>
+                        <ul class="list-unstyled">
+                            {% if booking.additional_charges.fuel > 0 %}
+                                <li><strong>Fuel:</strong> {{ booking.additional_charges.fuel }}</li>
+                            {% endif %}
+
+                            {% if booking.additional_charges.toll > 0 %}
+                                <li><strong>Toll:</strong> {{ booking.additional_charges.toll }}</li>
+                            {% endif %}
+
+                            {% if booking.additional_charges.parking > 0 %}
+                                <li><strong>Parking:</strong> {{ booking.additional_charges.parking }}</li>
+                            {% endif %}
+
+                            {% if booking.additional_charges.other > 0 %}
+                                <li><strong>Other:</strong> {{ booking.additional_charges.other }}</li>
+                            {% endif %}
+                            <li><strong>Total Fare:</strong> {{ booking.total_fare }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        // Constants
+        const WHATSAPP_API_URL = 'https://api.whatsapp.com/send';
+
+        // DOM Elements
+        const sendToDriverWhatsAppBtn = document.getElementById('sendToDriverWhatsAppBtn');
+        const sendToClientWhatsAppBtn = document.getElementById('sendToClientWhatsAppBtn');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sendToDriverWhatsAppBtn && sendToClientWhatsAppBtn) {
+                sendToDriverWhatsAppBtn.addEventListener('click', sendDriverMessage);
+                sendToClientWhatsAppBtn.addEventListener('click', sendClientMessage);
+            }
+        });
+
+        // Main Functions
+        function sendDriverMessage() {
+            const driverMessage = formatForDriver(getBookingDetails());
+            const driverPhone = `91{{ booking.driver.user.mobile }}`;
+            sendWhatsAppMessage(driverPhone, driverMessage);
+        }
+
+        function sendClientMessage() {
+            const clientMessage = formatForClient(getBookingDetails());
+            const clientPhone = `91{{ booking.customer_phone }}`;
+            sendWhatsAppMessage(clientPhone, clientMessage);
+        }
+
+        function sendWhatsAppMessage(phoneNumber, message) {
+            const whatsappUrl = `${WHATSAPP_API_URL}?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Helper Functions
+        function getBookingDetails() {
+            return {
+                businessName: "{{ booking.owner.business_name }}",
+                customerName: "{{ booking.customer_name }}",
+                customerPhone: "{{ booking.customer_phone }}",
+                pickupDate: "{{ booking.pickup_date }}",
+                pickupLocation: "{{ booking.pickup_location }}",
+                pickupCity: "{{ booking.pickup_city }}",
+                dropDate: "{{ booking.drop_date }}",
+                dropLocation: "{{ booking.drop_location }}",
+                dropCity: "{{ booking.drop_city }}",
+                journeyType: "{{ booking.journey_type }}",
+                journeyDescription: "{{ booking.journey_description }}",
+                totalFare: "{{ booking.total_fare }}",
+                cab: "{{ booking.cab }}",
+                driverName: "{{ booking.driver.user.first_name }}",
+                driverMobile: "{{ booking.driver.user.mobile }}",
+                multiLocations: JSON.parse('{{ multi_locations_json|safe }}')
+            };
+        }
+
+        function formatForDriver(details) {
+            let dropDateInfo = '';
+            if (details.dropDate !== "None") {
+                dropDateInfo = `🗓️ Drop Date: ${details.dropDate}`;
+            }
+
+            let descriptionInfo = '';
+            if (details.journeyDescription) {
+                descriptionInfo = `📝 Description: ${details.journeyDescription}`;
+            }
+
+            let multiLocationInfo = '';
+            console.log(details.multiLocations)
+            if (details.multiLocations && details.multiLocations.length > 0) {
+                multiLocationInfo = `
+                  🌍 Locations:
+                  ${details.multiLocations.map((location) => `
+                    Pickup: ${location.pickup} -> Drop: ${location.drop}
+                  `).join('')}
+                `;
+            }
+
+            return `
+                Booking Details:
+                🙋🏻‍♂️ Customer Name: ${details.customerName}
+                📱 Customer Phone: ${details.customerPhone}
+
+                🗓️ Pickup Date: ${details.pickupDate}
+                📍 Pickup Location: ${details.pickupLocation !== "None" ? `${details.pickupLocation}, ${details.pickupCity}` : details.pickupCity}
+                 ${dropDateInfo}
+                📌 Drop Location: ${details.dropLocation !== "None" ? `${details.dropLocation}, ${details.dropCity}` : details.dropCity}
+
+                🗺️ Journey Type: ${details.journeyType}
+                ${multiLocationInfo}
+                ${descriptionInfo}
+                
+                ₹ Fare: ${details.totalFare}
+                🚖 Cab: ${details.cab}
+                
+                From ${details.businessName}
+            `.trim();
+
+        }
+
+        function formatForClient(details) {
+            let dropDateInfo = '';
+            if (details.dropDate !== "None") {
+                dropDateInfo = `🗓️ Drop Date: ${details.dropDate}`;
+            }
+
+            let descriptionInfo = '';
+            if (details.journeyDescription) {
+                descriptionInfo = `📝 Description: ${details.journeyDescription}`;
+            }
+
+            let multiLocationInfo = '';
+            console.log(details.multiLocations)
+            if (details.multiLocations && details.multiLocations.length > 0) {
+                multiLocationInfo = `
+                  🌍 Locations:
+                  ${details.multiLocations.map((location) => `
+                    Pickup: ${location.pickup} -> Drop: ${location.drop}
+                  `).join('')}
+                `;
+            }
+
+            return `
+                Dear ${details.customerName},
+
+                Your 📝 booking is ✅ confirmed with the following details:
+
+                🗓️ Pickup Date: ${details.pickupDate}
+                📍 Pickup Location: ${details.pickupLocation !== "None" ? `${details.pickupLocation}, ${details.pickupCity}` : details.pickupCity}    
+                ${dropDateInfo}
+                📌 Drop Location: ${details.dropLocation !== "None" ? `${details.dropLocation}, ${details.dropCity}` : details.dropCity}
+
+                🗺️ Journey Type: ${details.journeyType}
+                ${multiLocationInfo}
+                ${descriptionInfo}
+
+                ₹  Fare: ${details.totalFare}
+                🚖 Cab: ${details.cab}
+                👨‍✈️ Driver: ${details.driverName} ${details.driverMobile}
+
+                Thank you for choosing our service! ${details.businessName} 🚕
+            `.trim();
+        }
+
+    </script>
+{% endblock %}
+

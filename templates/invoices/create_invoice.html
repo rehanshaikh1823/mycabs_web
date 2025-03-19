@@ -1,0 +1,200 @@
+{% extends "owner_base.html" %}
+{% load invoices_custom_filters %}
+{% block extra_css %}
+    {{ block.super }}
+    <style>
+        .invoice-container {
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .invoice-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+        }
+
+        .logo {
+            max-width: 64px;
+            height: auto;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .invoice-body {
+            padding: 30px;
+        }
+
+        .section-title {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .table-borderless td, .table-borderless th {
+            border: none;
+        }
+
+        .icon-column {
+            width: 30px;
+        }
+
+        .logo {
+            max-width: 64px;
+            height: auto;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+    </style>
+{% endblock %}
+{% block owner_content %}
+    <div class="container mt-1">
+        <div class="invoice-container">
+            <div class="invoice-header">
+                <div class="row align-items-center">
+                    <div class="col-8 d-flex align-items-center ">
+                        <img src="https://media.istockphoto.com/id/1423867725/vector/taxi-service-badge-taxi-map-pointer-vector-icon-for-business-and-advertising-public.jpg?s=612x612&w=0&k=20&c=bJkRG7N7SdCHpezSO99_eUzfSxAcyfAlyX5R-zXB830="
+                             alt="Choice Cab" class="logo me-3">
+                        <h1 class="h2 mb-0">INVOICE</h1>
+
+                    </div>
+                    <div class="col-4 d-flex align-items-center justify-content-end">
+                        {% if is_update %}
+{#                            <a href="{% url 'send_invoice_whatsapp' booking.id %}" class="btn btn-sm btn-success me-1"#}
+{#                               target="_blank">#}
+{#                                <i class="bi bi-whatsapp"></i>#}
+{#                            </a>#}
+                            <a href="{% url 'download_invoice' booking.id %}" class="btn btn-sm btn-secondary">
+                                <i class="bi bi-file-earmark-arrow-down"> Download</i>
+                            </a>
+                        {% else %}
+                            <form method="post" id="invoiceForm">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                {% if not is_update %}
+                                    <button type="submit" class="btn btn-sm btn-secondary">
+                                        <i class="bi bi-file-earmark-arrow-down"> Download</i>
+                                    </button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="invoice-body">
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <h5 class="section-title">{{ owner.business_name }}</h5>
+                        <p>
+                            {{ owner.business_address }}<br>
+                            +91 {{ owner.user.mobile }}<br>
+                            {{ owner.user.email }}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="section-title">Invoice Details</h5>
+                        <p>
+                            <strong>Invoice No:</strong> {{ invoice.invoice_number }}<br>
+                            {% if is_update %}
+                                <strong>Date:</strong> {{ invoice.created_date|date:"l, F j, Y H:i" }}<br>
+                            {% else %}
+                                <strong>Date:</strong> {% now "l, F j, Y H:i" %}<br>
+                            {% endif %}
+                            <strong>Status:</strong> {{ booking.payment_status }}
+                        </p>
+                    </div>
+                </div>
+
+                <h5 class="section-title">Journey Details</h5>
+                <table class="table table-borderless">
+                    <tbody>
+                    <tr>
+                        <td class="icon-column"><i class="bi bi-geo-alt-fill text-primary"></i></td>
+                        <td>
+                            <strong>Pickup:</strong>
+                            {% if booking.journey_type != 'Multiple Locations' %}
+                                {{ booking.pickup_location }},
+                            {% endif %} {{ booking.pickup_city }}
+                        </td>
+                        <td class="icon-column"><i class="bi bi-calendar-event-fill text-primary"></i></td>
+                        <td><strong>Date:</strong> {{ booking.pickup_date|date:"l, F j, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="icon-column"><i class="bi-pin-map-fill text-primary"></i></td>
+                        <td>
+                            <strong>Drop:</strong>
+                            {% if booking.journey_type != 'Multiple Locations' %}
+                                {{ booking.drop_location }},
+                            {% endif %} {{ booking.drop_city }}
+                        </td>
+                        <td class="icon-column"><i class="bi bi-calendar-check-fill text-primary"></i></td>
+                        <td><strong>Completion:</strong> {{ booking.drop_date|date:"l, F j, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="icon-column"><i class="bi bi-map-fill text-primary"></i></td>
+                        <td><strong>Journey Type:</strong> {{ booking.journey_type }}</td>
+                    </tr>
+                    <tr>
+                        {% if booking.journey_type == 'Multiple Locations' %}
+                            <td colspan="4">
+                                <ul>
+                                    {% for location in booking.multi_locations %}
+                                        <li>{{ location.pickup }} -> {{ location.drop }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mb-2">
+                    <div class="col-md-4">
+                        <h5 class="section-title">Driver Details</h5>
+                        <p>
+                            <strong>Name:</strong> {{ driver.user.first_name }} {{ driver.user.last_name }}<br>
+                            <strong>Phone:</strong> {{ driver.user.mobile }}<br>
+                            <strong>Cab Type:</strong> {{ cab.model }}<br>
+                            <strong>Cab Number:</strong> {{ cab.vehicle_number }}
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="section-title">Passenger Details</h5>
+                        <p><strong>Name:</strong> {{ booking.customer_name }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="section-title">Fare Breakdown</h5>
+                        <table class="table table-striped">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Description</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Journey Fare</td>
+                                <td class="text-end">₹{{ booking.total_fare }}</td>
+                            </tr>
+                            </tbody>
+                            <tfoot class="table-light">
+                            <tr class="fw-bold">
+                                <td>Total</td>
+                                <td class="text-end">₹{{ booking.total_fare }}</td>
+                            </tr>
+                            <tr class="fw-bold">
+                        </table>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted">Thank you for choosing Choice Cab. We appreciate your business!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
